@@ -37,6 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party
+    'django_bootstrap5',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'environ',
+    'django_bootstrap_icons',
+
+    # Apps
+    'hinded.apps.hinded',
 ]
 
 MIDDLEWARE = [
