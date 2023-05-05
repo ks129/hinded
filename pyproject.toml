@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "hinded"
+version = "0.1.0"
+description = ""
+authors = ["Karlis Suvi <45097959+ks129@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
