@@ -24,6 +24,13 @@ class IsikuHinne(models.Model):
     isik = models.ForeignKey(Isik, on_delete=models.CASCADE)
     hinne = models.ForeignKey(Hinded, on_delete=models.CASCADE)
 
+    class Meta:
+        """Mudeli seaded."""
+
+        constraints = [
+            models.UniqueConstraint(fields=["isik", "hinne"], name="unikaalne_nimi_hinne")
+        ]
+
     class Hinded(models.TextChoices):
         """Hinnete valikud."""
 
