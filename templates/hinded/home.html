@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load bootstrap_icons %}
+{% load django_bootstrap5 %}
+
+{% block title %}Avaleht{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Õpilane</th>
+                        <th scope="col">Kontrolltöö 1</th>
+                        <th scope="col">Kontrolltöö 2</th>
+                        <th scope="col">Kontrolltöö 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Õpilane 1</th>
+                        <td style="width: 5%">X</td>
+                        <td style="width: 5%">5</td>
+                        <td style="width: 5%">2</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Õpilane 2</th>
+                        <td style="width: 5%"><a href="#">{% bs_icon 'plus-square-fill' %}</a></td>
+                        <td style="width: 5%"><a href="#">{% bs_icon 'plus-square-fill' %}</a></td>
+                        <td style="width: 5%">4</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Õpilane 3</th>
+                        <td style="width: 5%">3</td>
+                        <td style="width: 5%">3</td>
+                        <td style="width: 5%">3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Hinnete nägemiseks peate sisse logima.</p>
+    {% endif %}
+{% endblock %}
