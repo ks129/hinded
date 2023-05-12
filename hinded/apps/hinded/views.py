@@ -8,4 +8,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs) -> dict:
         """Lisa vajalikud andmed vaatele."""
-        return {"isikud": [], "hinded": [], "isiku_hinded": []}
+        if self.request.user.is_authenticated:
+            return {"isikud": [], "hinded": [], "isiku_hinded": []}
+
+        return {}

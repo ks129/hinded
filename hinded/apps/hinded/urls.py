@@ -2,6 +2,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from django.views.generic import TemplateView
 from hinded.apps.hinded.forms import UserLoginForm
+from hinded.apps.hinded.views import HomeView
 
 urlpatterns = [
     path(
@@ -14,5 +15,5 @@ urlpatterns = [
         name='login',
     ),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('', TemplateView.as_view(template_name="hinded/home.html"), name="home"),
+    path('', HomeView.as_view(), name="home"),
 ]
