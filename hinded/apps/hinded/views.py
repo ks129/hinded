@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from .models import Hinded, Isik, IsikuHinne
 
 
 class HomeView(TemplateView):
@@ -9,6 +10,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs) -> dict:
         """Lisa vajalikud andmed vaatele."""
         if self.request.user.is_authenticated:
-            return {"isikud": [], "hinded": [], "isiku_hinded": []}
+            return {"isikud": Isik.objects.all(), "hinded": Hinded.objects.all(), "isiku_hinded": IsikuHinne.objects.all()}
 
         return {}
