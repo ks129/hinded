@@ -8,4 +8,4 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs) -> dict:
         """Lisa vajalikud andmed vaatele."""
-        return {"isikud": [], "hinded": []}
+        return {"isikud": [], "hinded": [], "isiku_hinded": []}
