@@ -5,6 +5,7 @@
 {% block title %}Avaleht{% endblock %}
 
 {% block content %}
+    {% include 'hinded/delete_hinne_confirm.html' %}
     {% if user.is_authenticated %}
         <div style="overflow-x: auto;">
             <table class="table">
@@ -15,11 +16,11 @@
                             <th scope="col">
                                 <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
                                 <br/>
-                                <a href="#" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <br/>
-                                <a href="#" class="btn">{% bs_icon 'person-fill' color='gray' %}</a>
+                                <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
-                                <a href="#" class="btn">{% bs_icon 'trash-fill' color='red' %}</a>
+                                <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm"><a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Kustuta">{% bs_icon 'trash-fill' color='red' %}</a></span>
                             </th>
                         {% endfor %}
                     </tr>
@@ -27,7 +28,12 @@
                 <tbody>
                     {% for isik, hinded in isikud.items %}
                         <tr>
-                            <th scope="row">{{ isik }}</th>
+                            <th scope="row">
+                                {{ isik }}
+                                <br/>
+                                <a href="#" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="#" class="btn">{% bs_icon 'trash-fill' color='red' %}</a>
+                            </th>
                             {% for hinne in hinded %}
                                 <td style="width: 5%;">
                                 {% if not hinne.vaartus %}
