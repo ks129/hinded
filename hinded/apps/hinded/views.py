@@ -1,4 +1,6 @@
-from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import TemplateView, DeleteView
 
 from .models import Hinded, Isik, IsikuHinne
 
@@ -50,3 +52,11 @@ class HomeView(TemplateView):
             return {"isikud": isikud, "hinded": hinded, "varvid": varvid}
 
         return {}
+
+
+class DeleteHinneView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
+    """Vaade hinnete kustutamiseks."""
+
+    model = Hinded
+    success_url = "/"
+    success_message = "Hinde kustutamine õnnestus."

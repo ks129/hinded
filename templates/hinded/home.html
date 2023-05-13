@@ -20,7 +20,11 @@
                                 <br/>
                                 <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
-                                <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm"><a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Kustuta">{% bs_icon 'trash-fill' color='red' %}</a></span>
+                                <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm">
+                                    <a href="#" class="btn delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
+                                        {% bs_icon 'trash-fill' color='red' %}
+                                    </a>
+                                </span>
                             </th>
                         {% endfor %}
                     </tr>
@@ -40,7 +44,7 @@
                                     <a href="#">{% bs_icon 'plus-square-fill' color='gray' %}</a>
                                 {% else %}
                                     {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
-                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed }}">
+                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed|default_if_none:'-' }}">
                                         {% bs_icon icon color=hinne.varv size='1.5em' %}
                                     </a>
                                     {% endwith %}
@@ -58,8 +62,13 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    $(document).on('click', '.delete-hinne', function() {
+        document.getElementById('delete-hinne-form').action = $(this).data('deleteAction');
+    });
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     </script>
 {% endblock %}

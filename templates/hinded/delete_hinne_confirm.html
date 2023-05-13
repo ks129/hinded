@@ -12,7 +12,11 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tühista</button>
-                <button type="button" class="btn btn-danger">Kustuta</button>
+
+                <form method="post" id="delete-hinne-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Kustuta</button>
+                </form>
             </div>
         </div>
     </div>
