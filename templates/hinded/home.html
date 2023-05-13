@@ -11,34 +11,49 @@
                 <thead>
                     <tr>
                         <th scope="col">Õpilane</th>
-                        <th scope="col">Kontrolltöö 1</th>
-                        <th scope="col">Kontrolltöö 2</th>
-                        <th scope="col">Kontrolltöö 3</th>
+                        {% for hinne in hinded %}
+                            <th scope="col">
+                                <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
+                                <br/>
+                                <a href="#" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <br/>
+                                <a href="#" class="btn">{% bs_icon 'person-fill' color='gray' %}</a>
+                                <br/>
+                                <a href="#" class="btn">{% bs_icon 'trash-fill' color='red' %}</a>
+                            </th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">Õpilane 1</th>
-                        <td style="width: 5%">X</td>
-                        <td style="width: 5%">5</td>
-                        <td style="width: 5%">2</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Õpilane 2</th>
-                        <td style="width: 5%"><a href="#">{% bs_icon 'plus-square-fill' %}</a></td>
-                        <td style="width: 5%"><a href="#">{% bs_icon 'plus-square-fill' %}</a></td>
-                        <td style="width: 5%">4</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Õpilane 3</th>
-                        <td style="width: 5%">3</td>
-                        <td style="width: 5%">3</td>
-                        <td style="width: 5%">3</td>
-                    </tr>
+                    {% for isik, hinded in isikud.items %}
+                        <tr>
+                            <th scope="row">{{ isik }}</th>
+                            {% for hinne in hinded %}
+                                <td style="width: 5%;">
+                                {% if not hinne.vaartus %}
+                                    <a href="#">{% bs_icon 'plus-square-fill' color='gray' %}</a>
+                                {% else %}
+                                    {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
+                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed }}">
+                                        {% bs_icon icon color=hinne.varv size='1.5em' %}
+                                    </a>
+                                    {% endwith %}
+                                {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     {% else %}
         <p>Hinnete nägemiseks peate sisse logima.</p>
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
 {% endblock %}
