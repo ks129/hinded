@@ -25,10 +25,11 @@ class HomeView(TemplateView):
             isikud = {}
             varvid = {}
             hinded = Hinded.objects.all()
+            ids = {}
 
             for isik in Isik.objects.all():
-                isikud[f"{isik.eesnimi} {isik.perenimi}"] = []
-                varvid[f"{isik.eesnimi} {isik.perenimi}"] = []
+                ids[(f"{isik.eesnimi} {isik.perenimi}", isik.id)] = isik.id
+                isikud[(f"{isik.eesnimi} {isik.perenimi}", isik.id)] = []
 
                 for hinne in hinded:
                     data = {
@@ -46,10 +47,10 @@ class HomeView(TemplateView):
                         data["isiku_id"] = isiku_hinne.isik_id
                         data["markmed"] = isiku_hinne.markmed
                     except IsikuHinne.DoesNotExist:
-                        varvid[f"{isik.eesnimi} {isik.perenimi}"].append("#A9A9A9")
+                        pass
 
-                    isikud[f"{isik.eesnimi} {isik.perenimi}"].append(data)
-            return {"isikud": isikud, "hinded": hinded, "varvid": varvid}
+                    isikud[(f"{isik.eesnimi} {isik.perenimi}", isik.id)].append(data)
+            return {"isikud": isikud, "hinded": hinded, "ids": ids}
 
         return {}
 
@@ -60,3 +61,11 @@ class DeleteHinneView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     model = Hinded
     success_url = "/"
     success_message = "Hinde kustutamine õnnestus."
+
+
+class DeleteIsikView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
+    """Vaade isiku kustutamiseks."""
+
+    model = Isik
+    success_url = "/"
+    success_message = "Õpilase kustutamine õnnestus."

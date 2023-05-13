@@ -6,6 +6,7 @@
 
 {% block content %}
     {% include 'hinded/delete_hinne_confirm.html' %}
+    {% include 'hinded/delete_isik_confirmation.html' %}
     {% if user.is_authenticated %}
         <div style="overflow-x: auto;">
             <table class="table">
@@ -21,9 +22,9 @@
                                 <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
                                 <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm">
-                                    <a href="#" class="btn delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
+                                    <button class="btn delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
                                         {% bs_icon 'trash-fill' color='red' %}
-                                    </a>
+                                    </button>
                                 </span>
                             </th>
                         {% endfor %}
@@ -33,10 +34,14 @@
                     {% for isik, hinded in isikud.items %}
                         <tr>
                             <th scope="row">
-                                {{ isik }}
+                                {{ isik.0 }}
                                 <br/>
                                 <a href="#" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
-                                <a href="#" class="btn">{% bs_icon 'trash-fill' color='red' %}</a>
+                                <span data-bs-toggle="modal" data-bs-target="#isik-delete-modal-confirm">
+                                    <button class="btn delete-isik" data-delete-action="{% url 'delete_isik' pk=isik.1 %}">
+                                        {% bs_icon 'trash-fill' color='red' %}
+                                    </button>
+                                </span>
                             </th>
                             {% for hinne in hinded %}
                                 <td style="width: 5%;">
@@ -66,6 +71,10 @@
     <script>
     $(document).on('click', '.delete-hinne', function() {
         document.getElementById('delete-hinne-form').action = $(this).data('deleteAction');
+    });
+
+    $(document).on('click', '.delete-isik', function() {
+        document.getElementById('delete-isik-form').action = $(this).data('deleteAction');
     });
 
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
