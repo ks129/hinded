@@ -49,7 +49,7 @@
                                     <a href="#">{% bs_icon 'plus-square-fill' color='gray' %}</a>
                                 {% else %}
                                     {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
-                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed|default_if_none:'-' }}">
+                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed|default:'-' }}">
                                         {% bs_icon icon color=hinne.varv size='1.5em' %}
                                     </a>
                                     {% endwith %}
