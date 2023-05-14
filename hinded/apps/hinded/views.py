@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import TemplateView, DeleteView
+from django.views.generic import DeleteView, TemplateView
 
 from .models import Hinded, Isik, IsikuHinne
 
@@ -23,7 +23,6 @@ class HomeView(TemplateView):
         """Lisa vajalikud andmed vaatele."""
         if self.request.user.is_authenticated:
             isikud = {}
-            varvid = {}
             hinded = Hinded.objects.all()
             ids = {}
 
