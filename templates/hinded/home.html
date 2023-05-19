@@ -17,7 +17,7 @@
                             <th scope="col">
                                 <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
                                 <br/>
-                                <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <br/>
                                 <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
@@ -67,7 +67,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
     $(document).on('click', '.delete-hinne', function() {
         document.getElementById('delete-hinne-form').action = $(this).data('deleteAction');

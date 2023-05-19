@@ -16,3 +16,13 @@
         </div>
     </div>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+    $(document).ready(function() {
+        $(".form").submit(function() {
+            $(".btn[type=submit]").attr("disabled", true);
+        });
+    });
+    </script>
+{% endblock %}
