@@ -19,7 +19,7 @@
                                 <br/>
                                 <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <br/>
-                                <a href="#" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
+                                <a href="{% url 'mass_add_hinded' pk=hinne.id %}" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
                                 <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm">
                                     <button class="btn delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">

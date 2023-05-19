@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Lisa hindeid hulgi - {{ hinne.nimi }}{% endblock %}
+
+{% block content %}
+    <h4>Lisa hindeid hulgi - {{ hinne.nimi }}</h4>
+
+    <form method="post" class="form">
+        {% csrf_token %}
+        {% for isik, data in isik_data.items %}
+            <div class="row mb-2">
+                <div class="col-3">
+                    <p><b>{{ isik.eesnimi }} {{ isik.perenimi }}</b></p>
+                </div>
+                <div class="col-1">
+                    <select class="form-select" aria-label="Hinne" name="isik-{{ isik.id }}-hinne">
+                        <option value="none"{% if not data %} selected{% endif %}>-</option>
+                        <option value="X"{% if data and data.vaartus == "X" %} selected{% endif %}>X</option>
+                        <option value="1"{% if data and data.vaartus == "1" %} selected{% endif %}>1</option>
+                        <option value="2"{% if data and data.vaartus == "2" %} selected{% endif %}>2</option>
+                        <option value="3"{% if data and data.vaartus == "3" %} selected{% endif %}>3</option>
+                        <option value="4"{% if data and data.vaartus == "4" %} selected{% endif %}>4</option>
+                        <option value="5"{% if data and data.vaartus == "5" %} selected{% endif %}>5</option>
+                    </select>
+                </div>
+                <div class="col-8">
+                    <textarea class="form-control" name="isik-{{ isik.id }}-markmed" placeholder="Kommentaarid" aria-label="Kommentaarid" rows="3">{% if data %}{{ data.markmed }}{% endif %}</textarea>
+                </div>
+            </div>
+       {% endfor %}
+
+        <button class="btn btn-primary" type="submit">Lisa</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    $(document).ready(function() {
+        $(".form").submit(function() {
+            $(".btn[type=submit]").attr("disabled", true);
+        });
+    });
+    </script>
+{% endblock %}

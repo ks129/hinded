@@ -1,5 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.views import View
 from django.views.generic import DeleteView, TemplateView, CreateView, UpdateView
 
 from .forms import HindedForm, IsikForm
@@ -110,4 +114,57 @@ class UpdateHinneView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = "Hinde uuendamine õnnestus"
     form_class = HindedForm
     template_name = "hinded/edit_hinne.html"
+
+
+class MassAddHinded(SuccessMessageMixin, LoginRequiredMixin, View):
+    """Lisa õpilastele korraga hinded."""
+
+    def get(self, request, *args, **kwargs):
+        """Lisa vajalikud väärtused HTML-i."""
+        hinne = get_object_or_404(Hinded, pk=kwargs["pk"])
+        isikud = Isik.objects.all()
+        isik_data = {}
+
+        for isik in isikud:
+            try:
+                isik_data[isik] = IsikuHinne.objects.get(isik=isik, hinne=hinne)
+            except IsikuHinne.DoesNotExist:
+                isik_data[isik] = None
+
+        return render(
+            request,
+            "hinded/mass_add_hinded.html",
+            context={"hinne": hinne, "isik_data": isik_data}
+        )
+
+    def post(self, request, *args, **kwargs):
+        """Lisa sisestatud hinded andmebaasi."""
+        hinne = get_object_or_404(Hinded, pk=kwargs["pk"])
+        isikud = Isik.objects.all()
+
+        for isik in isikud:
+            try:
+                data = IsikuHinne.objects.get(isik=isik, hinne=hinne)
+            except IsikuHinne.DoesNotExist:
+                data = None
+
+            if data:
+                if request.POST.get(f"isik-{isik.id}-hinne", "none") == "none":
+                    data.delete()
+                else:
+                    data.vaartus = request.POST.get(f"isik-{isik.id}-hinne")
+                    data.markmed = request.POST.get(f"isik-{isik.id}-markmed", "")
+                    data.save()
+            else:
+                if request.POST.get(f"isik-{isik.id}-hinne", "none") != "none":
+                    data = IsikuHinne(
+                        isik=isik,
+                        hinne=hinne,
+                        vaartus=request.POST.get(f"isik-{isik.id}-hinne"),
+                        markmed=request.POST.get(f"isik-{isik.id}-markmed", "")
+                    )
+                    data.save()
+
+        messages.success(request, "Hinnete muutmine õnnestus")
+        return HttpResponseRedirect("/")
 

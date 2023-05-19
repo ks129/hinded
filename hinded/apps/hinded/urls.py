@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from hinded.apps.hinded.forms import UserLoginForm
-from hinded.apps.hinded.views import CreateHinneView, DeleteHinneView, DeleteIsikView, HomeView, CreateIsikView, UpdateHinneView, UpdateIsikView
+from hinded.apps.hinded.views import CreateHinneView, DeleteHinneView, DeleteIsikView, HomeView, CreateIsikView, \
+    UpdateHinneView, UpdateIsikView, MassAddHinded
 
 urlpatterns = [
     path(
@@ -20,5 +21,6 @@ urlpatterns = [
     path('isik/<pk>/kustuta/', DeleteIsikView.as_view(), name='delete_isik'),
     path('isik/loo/', CreateIsikView.as_view(), name='create_isik'),
     path('isik/<pk>/uuenda/', UpdateIsikView.as_view(), name='update_isik'),
+    path('hinded/<pk>/hulgi', MassAddHinded.as_view(), name='mass_add_hinded'),
     path('', HomeView.as_view(), name="home"),
 ]
