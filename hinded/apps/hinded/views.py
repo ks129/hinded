@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import DeleteView, TemplateView
+from django.views.generic import DeleteView, TemplateView, CreateView, UpdateView
 
+from .forms import IsikForm
 from .models import Hinded, Isik, IsikuHinne
 
 COLORS = {
@@ -68,3 +69,23 @@ class DeleteIsikView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     model = Isik
     success_url = "/"
     success_message = "Õpilase kustutamine õnnestus."
+
+
+class CreateIsikView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """Vaade isiku loomiseks."""
+
+    model = Isik
+    success_url = "/"
+    success_message = "Õpilase loomine õnnestus"
+    form_class = IsikForm
+    template_name = "hinded/create_isik.html"
+
+
+class UpdateIsikView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """Vaade isiku uuendamiseks."""
+
+    model = Isik
+    success_url = "/"
+    success_message = "Õpilase uuendamine õnnestus"
+    form_class = IsikForm
+    template_name = "hinded/edit_isik.html"

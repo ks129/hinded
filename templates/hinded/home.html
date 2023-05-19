@@ -36,7 +36,7 @@
                             <th scope="row">
                                 {{ isik.0 }}
                                 <br/>
-                                <a href="#" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_isik' pk=isik.1 %}" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <span data-bs-toggle="modal" data-bs-target="#isik-delete-modal-confirm">
                                     <button class="btn delete-isik" data-delete-action="{% url 'delete_isik' pk=isik.1 %}">
                                         {% bs_icon 'trash-fill' color='red' %}
