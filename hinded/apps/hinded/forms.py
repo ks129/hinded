@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import CharField, PasswordInput, TextInput, ModelForm
 
-from hinded.apps.hinded.models import Isik
+from hinded.apps.hinded.models import Hinded, Isik
 
 
 class UserLoginForm(AuthenticationForm):
@@ -36,3 +36,22 @@ class IsikForm(ModelForm):
 
         model = Isik
         fields = ["eesnimi", "perenimi"]
+
+class HindedForm(ModelForm):
+    """Hinde lisamise ja muutmise vorm"""
+
+    def __init__(self, *args, **kwargs):
+        """midagi"""
+
+        super(HindedForm, self).__init__(*args, **kwargs)
+        self.fields["nimi"].label = "Töö nimi"
+        self.fields["kirjeldus"].label = "Töö kirjeldus"
+        self.fields["aine"].label = "Õppeaine"
+
+    class Meta:
+        """Üldine info hinde vormi kohta."""
+
+        model = Hinded
+        fields = ["nimi", "kirjeldus", "aine"]
+
+

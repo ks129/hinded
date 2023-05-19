@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import DeleteView, TemplateView, CreateView, UpdateView
 
-from .forms import IsikForm
+from .forms import HindedForm, IsikForm
 from .models import Hinded, Isik, IsikuHinne
 
 COLORS = {
@@ -89,3 +89,25 @@ class UpdateIsikView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = "Õpilase uuendamine õnnestus"
     form_class = IsikForm
     template_name = "hinded/edit_isik.html"
+
+
+
+class CreateHinneView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """Vaade hinde loomiseks."""
+
+    model = Hinded
+    success_url = "/"
+    success_message = "Hinde loomine õnnestus"
+    form_class = HindedForm
+    template_name = "hinded/create_hinne.html"
+
+
+class UpdateHinneView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """Vaade hinde uuendamiseks."""
+
+    model = Hinded
+    success_url = "/"
+    success_message = "Hinde uuendamine õnnestus"
+    form_class = HindedForm
+    template_name = "hinded/edit_hinne.html"
+
