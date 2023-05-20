@@ -7,6 +7,9 @@ class Isik(models.Model):
 
     eesnimi = models.CharField(max_length=100)
     perenimi = models.CharField(max_length=100)
+    # Kood, millega on õpilasel võimalik vaadata oma hindeid.
+    # Kui see on NULL või tühi, siis õpilane oma hindeid vaadata ei saa.
+    kood = models.CharField(max_length=100, default=None, null=True, blank=True)
 
     def __str__(self) -> str:
         """Näita administratsioonis õpilase nime."""

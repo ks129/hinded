@@ -27,12 +27,13 @@ class IsikForm(ModelForm):
         super(IsikForm, self).__init__(*args, **kwargs)
         self.fields["eesnimi"].label = "Õpilase eesnimi"
         self.fields["perenimi"].label = "Õpilase perekonnanimi"
+        self.fields["kood"].label = "Ligipääsukood"
 
     class Meta:
         """Üldine info õpilase vormi kohta."""
 
         model = Isik
-        fields = ["eesnimi", "perenimi"]
+        fields = ["eesnimi", "perenimi", "kood"]
 
 
 class HindedForm(ModelForm):
