@@ -8,10 +8,6 @@ class Isik(models.Model):
     eesnimi = models.CharField(max_length=100)
     perenimi = models.CharField(max_length=100)
 
-    def __str__(self) -> str:
-        """Näita õpilase nime adminis."""
-        return f"{self.eesnimi} {self.perenimi}"
-
 
 class Hinded(models.Model):
     """Hinde mudel."""
@@ -19,10 +15,6 @@ class Hinded(models.Model):
     nimi = models.CharField(max_length=100, default="Kontrolltöö")
     kirjeldus = models.CharField(max_length=500, blank=True, default="")
     aine = models.CharField(max_length=50)
-
-    def __str__(self) -> str:
-        """Näita hinde nime adminis."""
-        return self.nimi
 
 
 class IsikuHinne(models.Model):
@@ -49,7 +41,3 @@ class IsikuHinne(models.Model):
         constraints = [
             models.UniqueConstraint(fields=["isik", "hinne"], name="unikaalne_nimi_hinne")
         ]
-
-    def __str__(self) -> str:
-        """Näida väärtust, tööd ja õpilast."""
-        return f"{self.isik.eesnimi} {self.isik.perenimi} - {self.hinne.nimi}: {self.vaartus}"

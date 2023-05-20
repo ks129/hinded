@@ -19,13 +19,24 @@
                             <th scope="col">
                                 <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
                                 <br/>
-                                <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Muuda">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+                                    </svg>
+                                </a>
                                 <br/>
-                                <a href="{% url 'mass_add_hinded' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
+                                <a href="{% url 'mass_add_hinded' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+                                    </svg>
+                                </a>
                                 <br/>
                                 <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm">
                                     <button class="btn shadow-none delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
-                                        {% bs_icon 'trash-fill' color='red' %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"></path>
+                                        </svg>
                                     </button>
                                 </span>
                             </th>
@@ -38,21 +49,26 @@
                             <th scope="row">
                                 {{ isik.0 }}
                                 <br/>
-                                <a href="{% url 'update_isik' pk=isik.1 %}" class="btn shadow-none">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_isik' pk=isik.1 %}" class="btn shadow-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+                                    </svg>
+                                </a>
                                 <span data-bs-toggle="modal" data-bs-target="#isik-delete-modal-confirm">
                                     <button class="btn shadow-none delete-isik" data-delete-action="{% url 'delete_isik' pk=isik.1 %}">
-                                        {% bs_icon 'trash-fill' color='red' %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"></path>
+                                        </svg>
                                     </button>
                                 </span>
                             </th>
                             {% for hinne in hinded %}
                                 <td style="width: 5%;" id="hinne-isik-{{ isik.1 }}-hinne-{{ hinne.hinde_id }}">
                                 {% if not hinne.vaartus %}
-                                    {% include 'hinded/add_cell.html' with isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi %}
+                                    {% include 'hinded/add_cell.html' with isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi ikoon=hinne.ikoon %}
                                 {% else %}
-                                    {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
-                                        {% include 'hinded/hinne_cell.html' with markmed=hinne.markmed varv=hinne.varv icon=icon isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi vaartus=hinne.vaartus %}
-                                    {% endwith %}
+                                    {% include 'hinded/hinne_cell.html' with markmed=hinne.markmed isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi vaartus=hinne.vaartus ikoon=hinne.ikoon %}
                                 {% endif %}
                                 </td>
                             {% endfor %}
