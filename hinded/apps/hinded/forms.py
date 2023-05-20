@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
-from django.forms import CharField, ModelForm, PasswordInput, TextInput
+from django.forms import CharField, ModelForm, PasswordInput, TextInput, Textarea
 
 from .models import Hinded, Isik
 
@@ -47,6 +47,7 @@ class HindedForm(ModelForm):
         super(HindedForm, self).__init__(*args, **kwargs)
         self.fields["nimi"].label = "Nimi"
         self.fields["kirjeldus"].label = "Kirjeldus"
+        self.fields["kirjeldus"].widget = Textarea(attrs={"rows": 3})
         self.fields["aine"].label = "Õppeaine"
 
     class Meta:
