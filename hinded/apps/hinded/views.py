@@ -283,3 +283,43 @@ class EditSingleHinne(LoginRequiredMixin, View):
             "isik": isiku_hinne.isik.id,
             "hinne": isiku_hinne.hinne.id,
         })
+
+
+class ViewIsikHinded(View):
+    """Vaade õpilastele oma hinnete vaatamiseks."""
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """Küsi õpilaselt koodi oma hinnete vaatamiseks."""
+        return render(request, "hinded/request_hinded.html")
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """Kontrolli õpilase koodi ning näida hindeid."""
+        if request.POST.get("kood") is None:
+            messages.error(request, "Kood on vajalik hinnete nägemiseks.")
+            return render(request, "hinded/request_hinded.html")
+
+        try:
+            isik = Isik.objects.get(kood=request.POST.get("kood"))
+        except Isik.DoesNotExist:
+            messages.error(
+                request,
+                """Sellise koodiga õpilast ei ole.
+                Pange tähele, et suurtel ja väikestel tähtedel tehakse vahet."""
+            )
+            return render(request, "hinded/request_hinded.html")
+
+        hinded = []
+        for hinne in IsikuHinne.objects.filter(isik=isik):
+            hinded.append({
+                "ikoon": ICONS[hinne.vaartus],
+                "markmed": hinne.markmed,
+                "hinne": hinne.hinne.nimi,
+                "hinde_kirjeldus": hinne.hinne.kirjeldus,
+                "hinde_oppeaine": hinne.hinne.aine,
+            })
+
+        hinded.reverse()
+        return render(request, "hinded/isiku_hinded.html", {
+            "hinded": hinded,
+            "isik": isik,
+        })

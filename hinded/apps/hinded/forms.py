@@ -28,6 +28,9 @@ class IsikForm(ModelForm):
         self.fields["eesnimi"].label = "Õpilase eesnimi"
         self.fields["perenimi"].label = "Õpilase perekonnanimi"
         self.fields["kood"].label = "Ligipääsukood"
+        self.fields["kood"].error_messages = {
+            "unique": "Õpilaste koodid peavad olema unikaalsed.",
+        }
 
     class Meta:
         """Üldine info õpilase vormi kohta."""

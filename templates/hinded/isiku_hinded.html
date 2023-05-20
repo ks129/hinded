@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Vaata hindeid - {{ isik.eesnimi }} {{ isik.perenimi }}{% endblock %}
+
+{% block content %}
+    <h3>{{ isik.eesnimi }} {{ isik.perenimi }} hinded</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Hinne</th>
+                <th scope="col">Kommentaarid</th>
+                <th scope="col">Mille eest?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hinne in hinded %}
+                <tr>
+                    <td>{{ hinne.ikoon|safe }}</td>
+                    <td>{{ hinne.markmed }}</td>
+                    <td>
+                        <span data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Kirjeldus:</b> {{ hinne.hinde_kirjeldus }} <br/> <b>Õppeaine:</b> {{ hinne.hinde_oppeaine }}">
+                            {{ hinne.hinne }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    // Siinpuhul ei pruugi jQuery veel saadaval olla, sellepärast kasutusel tavaline JavaScript
+    const tooltipTriggerList = document.querySelectorAll("[data-bs-toggle=\"tooltip\"]");
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    </script>
+{% endblock %}

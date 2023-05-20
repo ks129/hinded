@@ -9,11 +9,16 @@ class Isik(models.Model):
     perenimi = models.CharField(max_length=100)
     # Kood, millega on õpilasel võimalik vaadata oma hindeid.
     # Kui see on NULL või tühi, siis õpilane oma hindeid vaadata ei saa.
-    kood = models.CharField(max_length=100, default=None, null=True, blank=True)
+    kood = models.CharField(max_length=100, default=None, null=True, blank=True, unique=True)
 
     def __str__(self) -> str:
         """Näita administratsioonis õpilase nime."""
         return f"{self.eesnimi} {self.perenimi}"
+
+    def save(self, *args, **kwargs) -> None:
+        """Muuda tühjad koodid NULLideks, et need ei läheks UNIQUE kontrolli alla."""
+        self.kood = self.kood or None
+        super().save(*args, **kwargs)
 
 
 class Hinded(models.Model):

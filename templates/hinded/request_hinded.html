@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Vaata hindeid{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+            <h4>Vaata oma hindeid</h4>
+
+            <form method="post" action="{% url 'view_isik_hinded' %}" class="form">
+                {% csrf_token %}
+                <p>Sisesta ligipääsukood.</p>
+                <input type="text" aria-label="Ligipääsukood" name="kood" class="form-control mb-2" />
+                <button type="submit" class="btn btn-success">Vaata</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
