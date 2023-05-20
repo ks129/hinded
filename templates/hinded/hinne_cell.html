@@ -1,5 +1,15 @@
 <span data-bs-toggle="modal" data-bs-target="#edit-single-hinne">
-    <button class="btn shadow-none hinne-cell-val" data-bs-toggle="tooltip" data-bs-title="{{ markmed|default:'-' }}" data-isik-id="{{ isik_id }}" data-isik-name="{{ isik_name }}" data-hinne-id="{{ hinde_id }}" data-hinne-name="{{ hinde_nimi }}" data-markmed="{{ markmed }}" data-hinne="{{ vaartus }}">
+    <button
+            class="btn shadow-none hinne-cell-val"
+            data-bs-toggle="tooltip"
+            data-bs-title="{{ markmed|default:'-' }}"
+            data-isik-id="{{ isik_id }}"
+            data-isik-name="{{ isik_name }}"
+            data-hinne-id="{{ hinde_id }}"
+            data-hinne-name="{{ hinde_nimi }}"
+            data-markmed="{{ markmed }}"
+            data-hinne="{{ vaartus }}"
+    >
         {{ ikoon|safe }}
     </button>
 </span>

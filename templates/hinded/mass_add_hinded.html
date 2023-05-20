@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block title %}Lisa hindeid hulgi - {{ hinne.nimi }}{% endblock %}
+{% block title %}Lisa hindeid - {{ hinne.nimi }}{% endblock %}
 
 {% block content %}
-    <h4>Lisa hindeid hulgi - {{ hinne.nimi }}</h4>
+    <h4>Lisa hindeid - {{ hinne.nimi }}</h4>
 
     <form method="post" class="form">
         {% csrf_token %}

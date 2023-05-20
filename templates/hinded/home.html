@@ -17,7 +17,13 @@
                         <th scope="col">Õpilane</th>
                         {% for hinne in hinded %}
                             <th scope="col">
-                                <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
+                                <div
+                                        data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}"
+                                >
+                                    {{ hinne.nimi }}
+                                </div>
                                 <br/>
                                 <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Muuda">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -84,50 +90,51 @@
 
 {% block scripts %}
     <script>
-    $(document).on('click', '.delete-hinne', function() {
-        document.getElementById('delete-hinne-form').action = $(this).data('deleteAction');
+    $(document).on("click", ".delete-hinne", function() {
+        $("#delete-hinne-form").attr("action", $(this).data("deleteAction"));
     });
 
-    $(document).on('click', '.delete-isik', function() {
-        document.getElementById('delete-isik-form').action = $(this).data('deleteAction');
+    $(document).on("click", ".delete-isik", function() {
+        $("#delete-isik-form").attr("action", $(this).data("deleteAction"));
     });
 
-    $(document).on('click', '.btn-single-hinne', function() {
-        document.getElementById('hinne-hinne-name').innerHTML = $(this).data('hinneName');
-        document.getElementById('hinne-isik-name').innerHTML = $(this).data('isikName');
-        document.getElementById('isik-id').value = $(this).data('isikId');
-        document.getElementById('hinne-id').value = $(this).data('hinneId');
+    $(document).on("click", ".btn-single-hinne", function() {
+        $("#hinne-hinne-name").html($(this).data("hinneName"));
+        $("#hinne-isik-name").html($(this).data("isikName"));
+        $("#isik-id").val($(this).data("isikId"));
+        $("#hinne-id").val($(this).data("hinneId"));
         $("#hinne-dropdown").val('X');
         $("#hinne-markmed").val('');
     });
 
-    $(document).on('click', '.hinne-cell-val', function() {
-        $('#delete-single-hinne-btn')
-            .attr('data-isik-id', $(this).data('isikId'))
-            .attr('data-hinne-id', $(this).data('hinneId'));
-        $('#edit-hinne-hinne-name').html($(this).data('hinneName'));
-        $('#edit-hinne-isik-name').html($(this).data('isikName'));
-        $('#edit-isik-id').val($(this).data('isikId'));
-        $('#edit-hinne-id').val($(this).data('hinneId'));
-        $('#edit-hinne-markmed').val($(this).data('markmed'));
-        $('#edit-hinne-dropdown').val($(this).data('hinne'));
+    $(document).on("click", ".hinne-cell-val", function() {
+        $("#delete-single-hinne-btn")
+            .attr("data-isik-id", $(this).data("isikId"))
+            .attr("data-hinne-id", $(this).data("hinneId"));
+        $("#edit-hinne-hinne-name").html($(this).data("hinneName"));
+        $("#edit-hinne-isik-name").html($(this).data("isikName"));
+        $("#edit-isik-id").val($(this).data("isikId"));
+        $("#edit-hinne-id").val($(this).data("hinneId"));
+        $("#edit-hinne-markmed").val($(this).data("markmed"));
+        $("#edit-hinne-dropdown").val($(this).data("hinne"));
     });
 
-    $(document).on('click', '#delete-single-hinne-btn', function() {
+    $(document).on("click", "#delete-single-hinne-btn", function() {
         $.ajax({
-            type: 'POST',
-            url: $(this).data('action'),
+            type: "POST",
+            url: $(this).data("action"),
             data: {
-                'hinne-id': $(this).attr('data-hinne-id'),
-                'isik-id': $(this).attr('data-isik-id'),
+                // .data(...) ei pruugi alati õigel ajal uueneda, sellepärast on siin kasutusel .attr(...)
+                "hinne-id": $(this).attr("data-hinne-id"),
+                "isik-id": $(this).attr("data-isik-id"),
             },
             headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val(),
             },
-            dataType: 'json',
+            dataType: "json",
             success: function(response) {
-                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
-                const modal = bootstrap.Modal.getInstance(document.getElementById('edit-single-hinne'));
+                $("#hinne-isik-" + response.isik + "-hinne-" + response.hinne).html(response.html);
+                const modal = bootstrap.Modal.getInstance(document.getElementById("edit-single-hinne"));
                 modal.hide();
             },
             error: function() {
@@ -136,21 +143,21 @@
         });
     });
 
-    $('#edit-single-hinne-form').submit(function(e) {
+    $("#edit-single-hinne-form").submit(function(e) {
         e.preventDefault();
 
         const data = $(this).serialize();
 
         $.ajax({
-            type: 'POST',
+            type: "POST",
             url: $(this).attr("action"),
             data: data,
-            dataType: 'json',
+            dataType: "json",
             success: function(response) {
-                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
-                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > span > [data-bs-toggle="tooltip"]');
+                $("#hinne-isik-" + response.isik + "-hinne-" + response.hinne).html(response.html);
+                const tooltipElement = $("#hinne-isik-" + response.isik + "-hinne-" + response.hinne + " > span > [data-bs-toggle=\"tooltip\"]");
                 new bootstrap.Tooltip(tooltipElement);
-                const modal = bootstrap.Modal.getInstance(document.getElementById('edit-single-hinne'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById("edit-single-hinne"));
                 modal.hide();
             },
             error: function() {
@@ -159,20 +166,20 @@
         });
     });
 
-    $('#add-single-hinne-form').submit(function(e) {
+    $("#add-single-hinne-form").submit(function(e) {
         e.preventDefault();
         const data = $(this).serialize();
 
         $.ajax({
-            type: 'POST',
+            type: "POST",
             url: $(this).attr("action"),
             data: data,
-            dataType: 'json',
+            dataType: "json",
             success: function(response) {
-                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
-                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > span > [data-bs-toggle="tooltip"]');
+                $("#hinne-isik-" + response.isik + "-hinne-" + response.hinne).html(response.html);
+                const tooltipElement = $("#hinne-isik-" + response.isik + "-hinne-" + response.hinne + " > span > [data-bs-toggle=\"tooltip\"]");
                 new bootstrap.Tooltip(tooltipElement);
-                const modal = bootstrap.Modal.getInstance(document.getElementById('add-single-hinne'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById("add-single-hinne"));
                 modal.hide();
             },
             error: function() {
@@ -181,7 +188,8 @@
         });
     });
 
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    // Siinpuhul ei pruugi jQuery veel saadaval olla, sellepärast kasutusel tavaline JavaScript
+    const tooltipTriggerList = document.querySelectorAll("[data-bs-toggle=\"tooltip\"]");
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     </script>
 {% endblock %}

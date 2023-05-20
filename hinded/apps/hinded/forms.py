@@ -1,32 +1,29 @@
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
-from django.forms import CharField, PasswordInput, TextInput, ModelForm
+from django.forms import CharField, ModelForm, PasswordInput, TextInput
 
-from hinded.apps.hinded.models import Hinded, Isik
+from .models import Hinded, Isik
 
 
 class UserLoginForm(AuthenticationForm):
-    """Overwrite default AuthenticationForm to translate labels."""
+    """Tavalise AuthenticationFormi ülekirjutamine, et lisada eestikeelsed väljade nimed."""
 
-    username = UsernameField(widget=TextInput(attrs={'autofocus': True}), label='Kasutajanimi')
+    username = UsernameField(widget=TextInput(attrs={"autofocus": True}), label="Kasutajanimi")
     password = CharField(
         label="Parool",
         strip=False,
-        widget=PasswordInput(attrs={'autocomplete': 'current-password'})
+        widget=PasswordInput(attrs={"autocomplete": "current-password"})
     )
 
     error_messages = {
-        'invalid_login': 'Vale kasutajanimi või parool.',
+        "invalid_login": "Vale kasutajanimi või parool.",
     }
-
-    def __init__(self, *args, **kwargs):
-        super(UserLoginForm, self).__init__(*args, **kwargs)
 
 
 class IsikForm(ModelForm):
-    """Õpilase lisamise ja muutmise vorm."""
+    """Vorm õpilaste lisamiseks ning muutmiseks."""
 
     def __init__(self, *args, **kwargs):
-        """Lisa vormi väljadele korralikud nimed."""
+        """Lisa vormi väljadele eestikeelsed korralikud nimed."""
         super(IsikForm, self).__init__(*args, **kwargs)
         self.fields["eesnimi"].label = "Õpilase eesnimi"
         self.fields["perenimi"].label = "Õpilase perekonnanimi"
@@ -37,15 +34,15 @@ class IsikForm(ModelForm):
         model = Isik
         fields = ["eesnimi", "perenimi"]
 
+
 class HindedForm(ModelForm):
-    """Hinde lisamise ja muutmise vorm"""
+    """Vorm hinnete lisamiseks ja muutmiseks."""
 
     def __init__(self, *args, **kwargs):
-        """midagi"""
-
+        """Määra igale väljale eestikeelne korralik nimetus."""
         super(HindedForm, self).__init__(*args, **kwargs)
-        self.fields["nimi"].label = "Töö nimi"
-        self.fields["kirjeldus"].label = "Töö kirjeldus"
+        self.fields["nimi"].label = "Nimi"
+        self.fields["kirjeldus"].label = "Kirjeldus"
         self.fields["aine"].label = "Õppeaine"
 
     class Meta:
@@ -53,5 +50,3 @@ class HindedForm(ModelForm):
 
         model = Hinded
         fields = ["nimi", "kirjeldus", "aine"]
-
-

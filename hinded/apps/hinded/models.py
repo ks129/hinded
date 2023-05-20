@@ -8,6 +8,10 @@ class Isik(models.Model):
     eesnimi = models.CharField(max_length=100)
     perenimi = models.CharField(max_length=100)
 
+    def __str__(self) -> str:
+        """Näita administratsioonis õpilase nime."""
+        return f"{self.eesnimi} {self.perenimi}"
+
 
 class Hinded(models.Model):
     """Hinde mudel."""
@@ -16,9 +20,19 @@ class Hinded(models.Model):
     kirjeldus = models.CharField(max_length=500, blank=True, default="")
     aine = models.CharField(max_length=50)
 
+    def __str__(self) -> str:
+        """Näita administratsioonis hinde nime."""
+        return self.nimi
+
 
 class IsikuHinne(models.Model):
-    """Õpilase hinde mudel."""
+    """
+    Õpilase hinde mudel.
+
+    Selle mudeli puhul pole __str__ funktsiooni lisatud,
+    kuna see kutsuks välja rohkem SQL päringuid ehk
+    muudaks lehe aeglasemaks.
+    """
 
     class HinneteValik(models.TextChoices):
         """Hinnete valikud."""
@@ -36,7 +50,7 @@ class IsikuHinne(models.Model):
     hinne = models.ForeignKey(Hinded, on_delete=models.CASCADE)
 
     class Meta:
-        """Mudeli seaded."""
+        """Keela ühele õpilasele ühte hinnet mitu korda lisada."""
 
         constraints = [
             models.UniqueConstraint(fields=["isik", "hinne"], name="unikaalne_nimi_hinne")

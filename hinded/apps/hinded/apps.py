@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class HindedConfig(AppConfig):
-    """Configuration of Hinded app."""
+    """Hinnete app'i põhiline konfiguratsioon."""
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'hinded.apps.hinded'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "hinded.apps.hinded"
