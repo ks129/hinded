@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.views import View
 from django.views.generic import DeleteView, TemplateView, CreateView, UpdateView
 
@@ -39,7 +40,8 @@ class HomeView(TemplateView):
                     data = {
                         "varv": None,
                         "vaartus": None,
-                        "hinde_id": None,
+                        "hinde_id": hinne.id,
+                        "hinde_nimi": hinne.nimi,
                         "isiku_id": None,
                         "markmed": None
                     }
@@ -47,7 +49,6 @@ class HomeView(TemplateView):
                         isiku_hinne = IsikuHinne.objects.get(hinne=hinne, isik=isik)
                         data["varv"] = COLORS[isiku_hinne.vaartus]
                         data["vaartus"] = isiku_hinne.vaartus
-                        data["hinde_id"] = isiku_hinne.hinne_id
                         data["isiku_id"] = isiku_hinne.isik_id
                         data["markmed"] = isiku_hinne.markmed
                     except IsikuHinne.DoesNotExist:
@@ -168,3 +169,31 @@ class MassAddHinded(SuccessMessageMixin, LoginRequiredMixin, View):
         messages.success(request, "Hinnete muutmine õnnestus")
         return HttpResponseRedirect("/")
 
+
+class AddSingleHinneView(LoginRequiredMixin, View):
+    """Vaade ühele õpilasele ühe hinde lisamiseks."""
+
+    def post(self, request, *args, **kwargs):
+        """Lisa õpilasele hinne ja tagasta tabeli välja HTML."""
+        if (
+                request.POST.get("hinne-id", None) is None
+                or request.POST.get("isik-id", None) is None
+                or request.POST.get("hinne", None) is None
+        ):
+            return HttpResponseBadRequest()
+
+        isiku_hinne = IsikuHinne(
+            hinne_id=request.POST.get("hinne-id"),
+            isik_id=request.POST.get("isik-id"),
+            vaartus=request.POST.get("hinne"),
+            markmed=request.POST.get("markmed", "")
+        )
+        isiku_hinne.save()
+
+        cell = render_to_string("hinded/hinne_cell.html", {
+            "varv": COLORS[isiku_hinne.vaartus],
+            "icon": f"{isiku_hinne.vaartus.lower()}-square-fill",
+            "markmed": isiku_hinne.markmed,
+        })
+
+        return JsonResponse({"html": cell, "hinne": isiku_hinne.hinne_id, "isik": isiku_hinne.isik_id})

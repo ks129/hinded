@@ -1,0 +1,33 @@
+<div class="modal fade" id="add-single-hinne" tabindex="-1" aria-labelledby="add-single-hinne" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" class="modal-content" id="add-single-hinne-form" action="{% url 'add_single_hinne' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="isik-delete-confirm-title">Lisa hinne</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulge"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" name="hinne-id" id="hinne-id" value="">
+                <input type="hidden" name="isik-id" id="isik-id" value="">
+                <p><b>Hinne:</b> <span id="hinne-hinne-name"></span></p>
+                <p><b>Õpilane:</b> <span id="hinne-isik-name"></span></p>
+
+                <select class="form-select mb-2 w-25" name="hinne" aria-label="Hinne" id="hinne-dropdown">
+                    <option value="X" selected>X</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <textarea class="form-control" id="hinne-markmed" name="markmed" placeholder="Kommentaarid" aria-label="Kommentaarid" rows="3"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tühista</button>
+                <button type="submit" id="add-single-hinne-confirm" class="btn btn-success">Lisa</button>
+            </div>
+        </form>
+    </div>
+</div>

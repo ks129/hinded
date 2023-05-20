@@ -7,6 +7,7 @@
 {% block content %}
     {% include 'hinded/delete_hinne_confirm.html' %}
     {% include 'hinded/delete_isik_confirmation.html' %}
+    {% include 'hinded/add_single_hinne.html' %}
     {% if user.is_authenticated %}
         <div style="overflow-x: auto;">
             <table class="table">
@@ -17,12 +18,12 @@
                             <th scope="col">
                                 <div data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Aine:</b> {{ hinne.aine|escape }} <br/> <b>Kirjeldus:</b> {{ hinne.kirjeldus|escape }}">{{ hinne.nimi }}</div>
                                 <br/>
-                                <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_hinne' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Muuda">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <br/>
-                                <a href="{% url 'mass_add_hinded' pk=hinne.id %}" class="btn" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
+                                <a href="{% url 'mass_add_hinded' pk=hinne.id %}" class="btn shadow-none" data-bs-toggle="tooltip" data-bs-title="Lisa hindeid hulgi">{% bs_icon 'person-fill' color='gray' %}</a>
                                 <br/>
                                 <span data-bs-toggle="modal" data-bs-target="#hinne-delete-modal-confirm">
-                                    <button class="btn delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
+                                    <button class="btn shadow-none delete-hinne" data-bs-toggle="tooltip" data-bs-title="Kustuta" data-delete-action="{% url 'delete_hinne' pk=hinne.id %}">
                                         {% bs_icon 'trash-fill' color='red' %}
                                     </button>
                                 </span>
@@ -36,22 +37,22 @@
                             <th scope="row">
                                 {{ isik.0 }}
                                 <br/>
-                                <a href="{% url 'update_isik' pk=isik.1 %}" class="btn">{% bs_icon 'pencil-square' color='blue' %}</a>
+                                <a href="{% url 'update_isik' pk=isik.1 %}" class="btn shadow-none">{% bs_icon 'pencil-square' color='blue' %}</a>
                                 <span data-bs-toggle="modal" data-bs-target="#isik-delete-modal-confirm">
-                                    <button class="btn delete-isik" data-delete-action="{% url 'delete_isik' pk=isik.1 %}">
+                                    <button class="btn shadow-none delete-isik" data-delete-action="{% url 'delete_isik' pk=isik.1 %}">
                                         {% bs_icon 'trash-fill' color='red' %}
                                     </button>
                                 </span>
                             </th>
                             {% for hinne in hinded %}
-                                <td style="width: 5%;">
+                                <td style="width: 5%;" id="hinne-isik-{{ isik.1 }}-hinne-{{ hinne.hinde_id }}">
                                 {% if not hinne.vaartus %}
-                                    <a href="#">{% bs_icon 'plus-square-fill' color='gray' %}</a>
+                                    <button type="button" class="btn btn-single-hinne shadow-none" title="Lisa hinne" data-bs-toggle="modal" data-bs-target="#add-single-hinne" data-isik-id="{{ isik.1 }}" data-isik-name="{{ isik.0 }}" data-hinne-id="{{ hinne.hinde_id }}" data-hinne-name="{{ hinne.hinde_nimi }}">
+                                        {% bs_icon 'plus-square-fill' color='gray' size='1.5em' %}
+                                    </button>
                                 {% else %}
                                     {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
-                                    <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ hinne.markmed|default:'-' }}">
-                                        {% bs_icon icon color=hinne.varv size='1.5em' %}
-                                    </a>
+                                        {% include 'hinded/hinne_cell.html' with markmed=hinne.markmed varv=hinne.varv icon=icon %}
                                     {% endwith %}
                                 {% endif %}
                                 </td>
@@ -74,6 +75,37 @@
 
     $(document).on('click', '.delete-isik', function() {
         document.getElementById('delete-isik-form').action = $(this).data('deleteAction');
+    });
+
+    $(document).on('click', '.btn-single-hinne', function() {
+        document.getElementById('hinne-hinne-name').innerHTML = $(this).data('hinneName');
+        document.getElementById('hinne-isik-name').innerHTML = $(this).data('isikName');
+        document.getElementById('isik-id').value = $(this).data('isikId');
+        document.getElementById('hinne-id').value = $(this).data('hinneId');
+        $("#hinne-dropdown").val('X');
+        $("#hinne-markmed").val('');
+    });
+
+    $('#add-single-hinne-form').submit(function(e) {
+        e.preventDefault();
+        const data = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr("action"),
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
+                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > [data-bs-toggle="tooltip"]');
+                new bootstrap.Tooltip(tooltipElement);
+                const modal = bootstrap.Modal.getInstance(document.getElementById('add-single-hinne'));
+                modal.hide();
+            },
+            error: function() {
+                alert("Viga hinde lisamisel.");
+            }
+        });
     });
 
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
