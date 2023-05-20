@@ -1,0 +1,34 @@
+<div class="modal fade" id="edit-single-hinne" tabindex="-1" aria-labelledby="edit-single-hinne" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" class="modal-content" id="edit-single-hinne-form" action="{% url 'edit_single_hinne' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Muuda hinnet</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulge"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" name="hinne-id" id="edit-hinne-id" value="">
+                <input type="hidden" name="isik-id" id="edit-isik-id" value="">
+                <p><b>Hinne:</b> <span id="edit-hinne-hinne-name"></span></p>
+                <p><b>Õpilane:</b> <span id="edit-hinne-isik-name"></span></p>
+
+                <select class="form-select mb-2 w-25" name="hinne" aria-label="Hinne" id="edit-hinne-dropdown">
+                    <option value="X" selected>X</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <textarea class="form-control" id="edit-hinne-markmed" name="markmed" placeholder="Kommentaarid" aria-label="Kommentaarid" rows="3"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger me-auto" id="delete-single-hinne-btn" data-action="{% url 'remove_single_hinne' %}">Kustuta</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tühista</button>
+                <button type="submit" id="edit-single-hinne-confirm" class="btn btn-success">Muuda</button>
+            </div>
+        </form>
+    </div>
+</div>

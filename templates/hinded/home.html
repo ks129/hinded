@@ -8,6 +8,7 @@
     {% include 'hinded/delete_hinne_confirm.html' %}
     {% include 'hinded/delete_isik_confirmation.html' %}
     {% include 'hinded/add_single_hinne.html' %}
+    {% include 'hinded/edit_single_hinne.html' %}
     {% if user.is_authenticated %}
         <div style="overflow-x: auto;">
             <table class="table">
@@ -47,12 +48,10 @@
                             {% for hinne in hinded %}
                                 <td style="width: 5%;" id="hinne-isik-{{ isik.1 }}-hinne-{{ hinne.hinde_id }}">
                                 {% if not hinne.vaartus %}
-                                    <button type="button" class="btn btn-single-hinne shadow-none" title="Lisa hinne" data-bs-toggle="modal" data-bs-target="#add-single-hinne" data-isik-id="{{ isik.1 }}" data-isik-name="{{ isik.0 }}" data-hinne-id="{{ hinne.hinde_id }}" data-hinne-name="{{ hinne.hinde_nimi }}">
-                                        {% bs_icon 'plus-square-fill' color='gray' size='1.5em' %}
-                                    </button>
+                                    {% include 'hinded/add_cell.html' with isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi %}
                                 {% else %}
                                     {% with icon=hinne.vaartus|lower|add:"-square-fill" %}
-                                        {% include 'hinded/hinne_cell.html' with markmed=hinne.markmed varv=hinne.varv icon=icon %}
+                                        {% include 'hinded/hinne_cell.html' with markmed=hinne.markmed varv=hinne.varv icon=icon isik_id=isik.1 isik_name=isik.0 hinde_id=hinne.hinde_id hinde_nimi=hinne.hinde_nimi vaartus=hinne.vaartus %}
                                     {% endwith %}
                                 {% endif %}
                                 </td>
@@ -86,6 +85,64 @@
         $("#hinne-markmed").val('');
     });
 
+    $(document).on('click', '.hinne-cell-val', function() {
+        $('#delete-single-hinne-btn')
+            .attr('data-isik-id', $(this).data('isikId'))
+            .attr('data-hinne-id', $(this).data('hinneId'));
+        $('#edit-hinne-hinne-name').html($(this).data('hinneName'));
+        $('#edit-hinne-isik-name').html($(this).data('isikName'));
+        $('#edit-isik-id').val($(this).data('isikId'));
+        $('#edit-hinne-id').val($(this).data('hinneId'));
+        $('#edit-hinne-markmed').val($(this).data('markmed'));
+        $('#edit-hinne-dropdown').val($(this).data('hinne'));
+    });
+
+    $(document).on('click', '#delete-single-hinne-btn', function() {
+        $.ajax({
+            type: 'POST',
+            url: $(this).data('action'),
+            data: {
+                'hinne-id': $(this).attr('data-hinne-id'),
+                'isik-id': $(this).attr('data-isik-id'),
+            },
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
+                const modal = bootstrap.Modal.getInstance(document.getElementById('edit-single-hinne'));
+                modal.hide();
+            },
+            error: function() {
+                alert("Hinde eemaldamine ebaõnnestus.");
+            }
+        });
+    });
+
+    $('#edit-single-hinne-form').submit(function(e) {
+        e.preventDefault();
+
+        const data = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr("action"),
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
+                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > span > [data-bs-toggle="tooltip"]');
+                new bootstrap.Tooltip(tooltipElement);
+                const modal = bootstrap.Modal.getInstance(document.getElementById('edit-single-hinne'));
+                modal.hide();
+            },
+            error: function() {
+                alert("Viga hinde muutmisel.");
+            }
+        });
+    });
+
     $('#add-single-hinne-form').submit(function(e) {
         e.preventDefault();
         const data = $(this).serialize();
@@ -97,7 +154,7 @@
             dataType: 'json',
             success: function(response) {
                 $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne).html(response.html);
-                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > [data-bs-toggle="tooltip"]');
+                const tooltipElement = $('#hinne-isik-' + response.isik + '-hinne-' + response.hinne + ' > span > [data-bs-toggle="tooltip"]');
                 new bootstrap.Tooltip(tooltipElement);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('add-single-hinne'));
                 modal.hide();

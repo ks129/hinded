@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.views import View
@@ -194,6 +194,76 @@ class AddSingleHinneView(LoginRequiredMixin, View):
             "varv": COLORS[isiku_hinne.vaartus],
             "icon": f"{isiku_hinne.vaartus.lower()}-square-fill",
             "markmed": isiku_hinne.markmed,
+            "isik_id": isiku_hinne.isik.id,
+            "isik_name": f"{isiku_hinne.isik.eesnimi} {isiku_hinne.isik.perenimi}",
+            "hinde_id": isiku_hinne.hinne.id,
+            "hinde_nimi": isiku_hinne.hinne.nimi,
+            "vaartus": isiku_hinne.vaartus,
         })
 
         return JsonResponse({"html": cell, "hinne": isiku_hinne.hinne_id, "isik": isiku_hinne.isik_id})
+
+
+class RemoveSingleHinne(LoginRequiredMixin, View):
+    """Eemalda õpilaselt üks hinne."""
+
+    def post(self, request, *args, **kwargs):
+        """Eemalda õpilaselt üks hinne."""
+        if request.POST.get("hinne-id", None) is None or request.POST.get("isik-id", None) is None:
+            return HttpResponseBadRequest()
+
+        try:
+            isiku_hinne = IsikuHinne.objects.get(
+                hinne_id=int(request.POST.get("hinne-id")),
+                isik_id=int(request.POST.get("isik-id"))
+            )
+        except IsikuHinne.DoesNotExist:
+            return HttpResponseNotFound()
+
+        cell = render_to_string("hinded/add_cell.html", {
+            "isik_id": isiku_hinne.isik.id,
+            "isik_name": f"{isiku_hinne.isik.eesnimi} {isiku_hinne.isik.perenimi}",
+            "hinde_id": isiku_hinne.hinne.id,
+            "hinde_nimi": isiku_hinne.hinne.nimi,
+        })
+        isiku_hinne.delete()
+
+        return JsonResponse({"html": cell, "isik": int(request.POST.get("isik-id")), "hinne": int(request.POST.get("hinne-id"))})
+
+
+class EditSingleHinne(LoginRequiredMixin, View):
+    """Vaade ühe õpilase ühe hinde muutmiseks."""
+
+    def post(self, request, *args, **kwargs):
+        """Muuda ühe õpilase ühte hinnet."""
+        if (
+                request.POST.get("hinne-id", None) is None
+                or request.POST.get("isik-id", None) is None
+                or request.POST.get("hinne", None) is None
+        ):
+            return HttpResponseBadRequest()
+
+        try:
+            isiku_hinne = IsikuHinne.objects.get(
+                isik_id=request.POST.get("isik-id"),
+                hinne_id=request.POST.get("hinne-id")
+            )
+        except IsikuHinne.DoesNotExist:
+            return HttpResponseNotFound()
+
+        isiku_hinne.vaartus = request.POST.get("hinne")
+        isiku_hinne.markmed = request.POST.get("markmed", "")
+        isiku_hinne.save()
+
+        cell = render_to_string("hinded/hinne_cell.html", {
+            "varv": COLORS[isiku_hinne.vaartus],
+            "icon": f"{isiku_hinne.vaartus.lower()}-square-fill",
+            "markmed": isiku_hinne.markmed,
+            "isik_id": isiku_hinne.isik.id,
+            "isik_name": f"{isiku_hinne.isik.eesnimi} {isiku_hinne.isik.perenimi}",
+            "hinde_id": isiku_hinne.hinne.id,
+            "hinde_nimi": isiku_hinne.hinne.nimi,
+            "vaartus": isiku_hinne.vaartus,
+        })
+
+        return JsonResponse({"html": cell, "isik": isiku_hinne.isik.id, "hinne": isiku_hinne.hinne.id})
